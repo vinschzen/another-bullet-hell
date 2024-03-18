@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Boundary
+  - Enemy
+  - EnemyBullet
   layers:
   - Default
   - TransparentFX
@@ -12,8 +14,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - WaitingForUserInput
+  - Camera
   - 
   - 
   - 

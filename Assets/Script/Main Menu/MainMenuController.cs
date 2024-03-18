@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
+// using UnityEditor.SearchService;
 using UnityEngine;
 using TMPro;
+using System;
+using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
     public GameObject[] arrMenus;
     public TMP_Text nameSpan;
     public TMP_Text levelSpan;
+    public TMP_Text expSpan;
     public TMP_Text healthSpan;
     public TMP_Text defenseSpan;
     public TMP_Text attackSpan;
@@ -16,22 +19,18 @@ public class MainMenuController : MonoBehaviour
     public TMP_Text stageDifficultySpan;
     void Start()
     {
-        // nameSpan = transform.Find("Name Span").GetComponent<TMP_Text>();
-        // levelSpan = transform.Find("Level Span").GetComponent<TMP_Text>();
-        // healthSpan = transform.Find("Health Span").GetComponent<TMP_Text>();
-        // defenseSpan = transform.Find("Defense Span").GetComponent<TMP_Text>();
-        // attackSpan = transform.Find("Attack Span").GetComponent<TMP_Text>();
-        // difficultySpan = transform.Find("Difficulty Span").GetComponent<TMP_Text>();
-        // stageDifficultySpan = transform.Find("Stage Difficulty Span").GetComponent<TMP_Text>();
-
         PlayerData data = SaveManager.Instance.CurrentSave;
 
         nameSpan.text = data.name;
         levelSpan.text = "Level " + data.level;
+        expSpan.text = "Exp: " + data.exp + "/" + data.level*100;
         attackSpan.text = "Attack : " + data.stats[0].value;
         defenseSpan.text = "Defense : " + data.stats[1].value;
         healthSpan.text = "Health : " + data.stats[2].value;
-
+        
+        RectTransform expBarFill = GameObject.Find("Exp Bar Fill").GetComponent<RectTransform>();
+        double levelPercentage = (double)(data.exp) / (data.level * 100);
+        expBarFill.sizeDelta = new Vector2( (float) levelPercentage * 222.1f , expBarFill.sizeDelta.y);
 
         var difficultyDisplay = "";
         switch (data.difficulty)
@@ -52,6 +51,19 @@ public class MainMenuController : MonoBehaviour
 
         difficultySpan.text = "Difficulty : " + difficultyDisplay;
         stageDifficultySpan.text = "Difficulty : " + difficultyDisplay;
+
+        foreach (string stageName in data.progress)
+        {
+            GameObject stage = GameObject.Find(stageName + " Button");
+            // Debug.Log($"Stage Name : {stageName}");
+            if (stage) {
+                stage.GetComponent<Button>().interactable = true;
+                stage.SetActive(true);
+            }
+            else {
+                Debug.Log(stageName + " not found");
+            }
+        }
 
         openMenu( arrMenus[0] );   
     }

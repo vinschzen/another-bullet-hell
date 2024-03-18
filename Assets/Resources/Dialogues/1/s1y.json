@@ -1,0 +1,9 @@
+{
+  "name": "Character Name",
+  "icon": "character01.png",
+  "text": [
+    "Yes ? no need to worry then.",
+    "Let's continue."
+  ],
+  "next": "s2"
+}

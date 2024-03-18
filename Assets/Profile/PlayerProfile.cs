@@ -18,7 +18,7 @@ public class PlayerProfile
         PlayerName = playerName;
         PlayerLevel = 1; 
         PlayerExperience = 0; 
-        UnlockedStages = new HashSet<string> { "1" };
+        UnlockedStages = new HashSet<string> { "Stage 1" };
         Allocations = new Hashtable(){
             {"Health", 3},
             {"Defense", 1},

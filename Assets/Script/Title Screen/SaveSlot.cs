@@ -32,9 +32,8 @@ public class SaveSlot : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
-
             Username.text = data.name;  
-            Stage.text = "Stage " + data.progress[data.progress.Count-1].ToString();
+            Stage.text = data.progress[data.progress.Count-1].ToString();
 
             TimeSpan time = TimeSpan.FromSeconds(data.playtime);
             string formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", 
@@ -58,6 +57,8 @@ public class SaveSlot : MonoBehaviour
                     break;
             }
             EmptyPrompt.gameObject.SetActive(false);
+            
+            
         }
         else
         {

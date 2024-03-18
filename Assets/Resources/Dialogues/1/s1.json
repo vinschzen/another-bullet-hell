@@ -1,0 +1,20 @@
+{
+  "name": "Character Name",
+  "icon": "character01.png",
+  "text": [
+    "This is the most feature-rich dialog with choices you can make.",
+    "This is the first dialogue",
+    "And this is the second",
+    "Finally, this is the third."
+  ],
+  "choices": [
+    {
+      "text": "Yes.",
+      "next": "s1y"
+    },
+    {
+        "text": "No.",
+        "next": "s1n"
+    }
+  ]
+}

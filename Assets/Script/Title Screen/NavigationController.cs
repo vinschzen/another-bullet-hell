@@ -8,6 +8,7 @@ public class NavigationController : MonoBehaviour
     public GameObject NewMenu;
     public GameObject LoadMenu;
     public GameObject SelectMenu;
+    public GameObject OptionsMenu;
 
     void Start()
     {
@@ -25,6 +26,7 @@ public class NavigationController : MonoBehaviour
         NewMenu.SetActive(false);
         LoadMenu.SetActive(false);
         SelectMenu.SetActive(false);
+        OptionsMenu.SetActive(false);
 
         menu.SetActive(true);
     }

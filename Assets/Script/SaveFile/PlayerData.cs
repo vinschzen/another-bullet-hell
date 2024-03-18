@@ -30,7 +30,7 @@ public class PlayerData
         this.exp = 0;
         this.playtime = 0f;
         this.progress = new List<string>();
-        this.progress.Add("1");
+        this.progress.Add("Stage 1");
         this.stats = new List<Stat>
         {
             new Stat { name = "attack", value = 1 },
