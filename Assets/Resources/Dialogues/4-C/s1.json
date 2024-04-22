@@ -1,0 +1,8 @@
+{
+  "name": "King",
+  "icon": "character05.png",
+  "text": [
+    "Valiant."
+  ],
+  "next": "s2"
+}

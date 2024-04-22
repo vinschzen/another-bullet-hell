@@ -55,9 +55,18 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Use Skill"",
+                    ""name"": ""UseSkill"",
                     ""type"": ""Button"",
                     ""id"": ""b944a9b8-9e2d-4a3d-969a-e52443f94aa2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d87fb3d-95bf-45fe-b1bd-53ab5c1cdd6c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -171,7 +180,18 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Use Skill"",
+                    ""action"": ""UseSkill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8cf1c299-2be0-42b1-b33a-8cead6d38a74"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchSkill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -185,7 +205,8 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
-        m_Gameplay_UseSkill = m_Gameplay.FindAction("Use Skill", throwIfNotFound: true);
+        m_Gameplay_UseSkill = m_Gameplay.FindAction("UseSkill", throwIfNotFound: true);
+        m_Gameplay_SwitchSkill = m_Gameplay.FindAction("SwitchSkill", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +272,7 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Fire;
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_UseSkill;
+    private readonly InputAction m_Gameplay_SwitchSkill;
     public struct GameplayActions
     {
         private @InputAsset m_Wrapper;
@@ -259,6 +281,7 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @UseSkill => m_Wrapper.m_Gameplay_UseSkill;
+        public InputAction @SwitchSkill => m_Wrapper.m_Gameplay_SwitchSkill;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -280,6 +303,9 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
             @UseSkill.started += instance.OnUseSkill;
             @UseSkill.performed += instance.OnUseSkill;
             @UseSkill.canceled += instance.OnUseSkill;
+            @SwitchSkill.started += instance.OnSwitchSkill;
+            @SwitchSkill.performed += instance.OnSwitchSkill;
+            @SwitchSkill.canceled += instance.OnSwitchSkill;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -296,6 +322,9 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
             @UseSkill.started -= instance.OnUseSkill;
             @UseSkill.performed -= instance.OnUseSkill;
             @UseSkill.canceled -= instance.OnUseSkill;
+            @SwitchSkill.started -= instance.OnSwitchSkill;
+            @SwitchSkill.performed -= instance.OnSwitchSkill;
+            @SwitchSkill.canceled -= instance.OnSwitchSkill;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -319,5 +348,6 @@ public partial class @InputAsset: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnUseSkill(InputAction.CallbackContext context);
+        void OnSwitchSkill(InputAction.CallbackContext context);
     }
 }

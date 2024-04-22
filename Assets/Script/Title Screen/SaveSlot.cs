@@ -11,7 +11,9 @@ public class SaveSlot : MonoBehaviour
     public TMP_Text Stage;
     public TMP_Text Playtime;
     public TMP_Text Difficulty;
+    public TMP_Text NewGamePlus;
     public TMP_Text EmptyPrompt;
+
     public int slot;
 
     void Start()
@@ -20,6 +22,7 @@ public class SaveSlot : MonoBehaviour
         Stage = transform.Find("Stage").GetComponent<TMP_Text>();
         Playtime = transform.Find("Playtime").GetComponent<TMP_Text>();
         Difficulty = transform.Find("Difficulty").GetComponent<TMP_Text>();
+        NewGamePlus = transform.Find("NG+").GetComponent<TMP_Text>();
         EmptyPrompt = transform.Find("Empty").GetComponent<TMP_Text>();
 
         LoadSaveData();
@@ -34,6 +37,14 @@ public class SaveSlot : MonoBehaviour
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
             Username.text = data.name;  
             Stage.text = data.progress[data.progress.Count-1].ToString();
+            
+            if (data.newgameplus > 0)
+            {
+                NewGamePlus.text = "NG+" + data.newgameplus;
+            }
+            else {
+                NewGamePlus.text = "";
+            }
 
             TimeSpan time = TimeSpan.FromSeconds(data.playtime);
             string formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", 
@@ -66,6 +77,7 @@ public class SaveSlot : MonoBehaviour
             Stage.gameObject.SetActive(false);
             Playtime.gameObject.SetActive(false);
             Difficulty.gameObject.SetActive(false);
+            NewGamePlus.gameObject.SetActive(false);
             EmptyPrompt.gameObject.SetActive(true);
         }
         

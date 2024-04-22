@@ -17,7 +17,7 @@ public class Enemy
     public float yLimit;
 
     [Header("References")]
-    public BaseWeapon weapon;
+    public List<BaseWeapon> weapons;
     public Transform bulletSpawn;
     public GameObject shot;
     public Animator anim;

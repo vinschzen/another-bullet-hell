@@ -4,19 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
+    public string dialogueChapter = "1";
+    public string dialogueStart = "s1";
     public InputActionAsset inputActionAsset;
 
     public TextMeshProUGUI nameText;
     public Image portraitImage;
     public TextMeshProUGUI dialogueText;
     public GameObject choicesParent;
+    public TextAsset textAsset;
+    
+    public TextAsset textAssetYes;
+    
+    public TextAsset textAssetNo;
     private Dialogue dialogue;
     private Queue<string> sentences = new Queue<string>();
     private int selectedIndex = 0;
@@ -25,26 +30,23 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        loadDialogue("s1");
+        if (dialogueChapter == "2" && SaveManager.Instance.CurrentSave.newgameplus > 0)
+        {
+            dialogueChapter = "2alt";
+        }
+        loadDialogue(dialogueStart);
     }
 
 
     public void loadDialogue(string name) {
+
         choicesParent.SetActive(false);
-        using (StreamReader reader = new StreamReader("Assets/Resources/Dialogues/1/"+name+".json"))
-        {
-            string json = reader.ReadToEnd();
-            dialogue  = JsonUtility.FromJson<Dialogue>(json);
-            choicesParent.SetActive(false);
-            StartDialogue();
+        TextAsset jsonAsset = Resources.Load<TextAsset>("Dialogues/"+dialogueChapter+"/"+name); 
 
-            // List<Dialogue> items = JsonUtility.FromJson<List<Dialogue>>(json);
-
-            // foreach (var item in items)
-            // {
-            //     Debug.Log($"Millis: {item.millis}, Stamp: {item.stamp}, Temp: {item.temp}");
-            // }
-        }
+        string json = jsonAsset.text;
+        dialogue = JsonUtility.FromJson<Dialogue>(json);
+        choicesParent.SetActive(false);
+        StartDialogue();
     }
 
     public void StartDialogue()
@@ -132,6 +134,26 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    void makeChoice(Dialogue.Choice choice) {
+        // Debug.Log("Made choice : " + choice.text);
+
+        if (choice.text == "To serve you.")
+        {
+            GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
+            controller.nextStageUnlock = "Stage 3-A";
+        }
+        else if (choice.text == "To stop you.")
+        {
+            GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
+            controller.nextStageUnlock = "Stage 3-B";
+        }
+        else if (choice.text == "Neither.")
+        {
+            GameController controller = GameObject.Find("GameController").GetComponent<GameController>();
+            controller.nextStageUnlock = "Stage 4-C";
+        }
+    }
+
     void Update()
     {
         if (choicesParent.activeSelf)
@@ -161,12 +183,12 @@ public class DialogueManager : MonoBehaviour
 
             if (inputActionAsset["Fire"].triggered)
             {
+                makeChoice(dialogue.choices[selectedIndex]);
                 loadDialogue(dialogue.choices[selectedIndex].next);
             }
 
         }
         else {
-            // if (Input.GetKeyDown(KeyCode.Space))
             if (inputActionAsset["Fire"].triggered)
             {
                 if (dialogueText.text == sentences.Peek())

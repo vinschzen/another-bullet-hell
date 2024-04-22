@@ -2,10 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.IO;
+using System.Linq;
 
 [RequireComponent(typeof(Animator), typeof(AudioSource))]
 public class EnemyBehavior : MonoBehaviour
 {
+    public float moveSpeed = 5f; 
+    public float moveDuration = 3f;     
+    public float moveMinDistance = 1f; 
+    public float moveMaxDistance = 10f; 
+    private float idleTimer = 0f;
+    private Vector3 targetPosition;
+    private GameObject limitLeft, limitRight;
+
     [SerializeField]
     private Enemy _enemy;
     private TextMeshProUGUI damageIndicatorText;
@@ -22,22 +32,46 @@ public class EnemyBehavior : MonoBehaviour
         private set { _enemy.health = value; }
     }
 
-    protected BaseWeapon Weapon
+    protected List<BaseWeapon> Weapons
     {
-        get { return _enemy.weapon; }
-        private set { _enemy.weapon = value; }
+        get { return _enemy.weapons; }
+        private set { _enemy.weapons = value; }
     }
+
+    private List<BaseWeapon> _activeWeapons = new List<BaseWeapon>();
 
     private float _canShoot = -1f;
     private bool _dead;
+    private PlayerData data;
 
 
     public virtual void Start() {
+        try
+        {
+            this.data = SaveManager.Instance.CurrentSave;
+        }
+        catch (System.Exception)
+        {
+            string path = Application.persistentDataPath + "/playerData_1.json";
+            string json = File.ReadAllText(path);
+            this.data = JsonUtility.FromJson<PlayerData>(json);          
+        }
         _enemy.anim = GetComponent<Animator>();
         _enemy.properAudioSource = GetComponent<AudioSource>();
-        _enemy.health = _enemy.health  * (SaveManager.Instance.CurrentSave.difficulty + 1);
+        _enemy.health = _enemy.health  * (this.data.difficulty + 1 + this.data.newgameplus);
 
         visualNovel = GameObject.Find("Visual Novel");
+
+
+        limitLeft = GameObject.Find("limitLeft");
+        limitRight = GameObject.Find("limitRight");
+
+        GenerateNewTargetPosition();
+    }
+
+    public float getHealth()
+    {
+        return this.Health;
     }
 
     
@@ -53,12 +87,45 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (!visualNovel.activeSelf)
         {
-            if (Time.time > nextFire)
+            foreach (var w in Weapons)
             {
-                nextFire = Time.time + Weapon.FireRate;
-                Weapon.Fire( _enemy.bulletSpawn );
-            } 
+                if (Time.time > w.nextCooldown)
+                {
+                    w.nextCooldown = Time.time + w.Cooldown;
+                    w.nextDuration = Time.time + w.Duration;
+                    _activeWeapons.Add(w);
+                    // Debug.Log("Added " + w.name + " at " +  Time.time);
+                }
+            }
+
+            foreach (var w in _activeWeapons)
+            {
+                if (Time.time > w.nextDuration)
+                {
+                    _activeWeapons.Remove(w);
+                    // Debug.Log("Removed " + w.name + " at " +  Time.time);
+                }
+
+                if (Time.time > w.nextFire)
+                {
+                    w.nextFire = Time.time + w.FireRate;
+                    w.Fire( _enemy.bulletSpawn );
+                } 
+            }
+
+            idleTimer += Time.deltaTime;
+
+            if (idleTimer >= moveDuration)
+            {
+                idleTimer = 0f;
+                GenerateNewTargetPosition();
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            
         }
+
+        
     }
 
     // void Fire()
@@ -114,6 +181,30 @@ public class EnemyBehavior : MonoBehaviour
         parentObject.transform.position = transform.position;
         damageIndicatorText.transform.localRotation = Quaternion.identity;
         damageIndicatorText.transform.localScale = new Vector3(3, 3, 3);
+    }
+
+    void GenerateNewTargetPosition()
+    {
+        float leftOrRight = Random.Range(0,2);
+        float distance = Random.Range(moveMinDistance, moveMaxDistance);
+        float randomX = 0;
+        switch (leftOrRight)
+        {
+            case 0:
+                randomX = -distance; 
+                break;
+            case 1:
+                randomX = distance;
+                break;
+            default:
+                break;
+        }
+
+        // print("left or right : " + leftOrRight);
+
+        // print("distance : " + randomX);
+
+        targetPosition = new Vector3(randomX, transform.position.y, transform.position.z);
     }
 
     

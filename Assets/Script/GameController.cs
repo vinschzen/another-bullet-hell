@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.IO;
 
 public class GameController : MonoBehaviour
 {
-    public string nextStageUnlock;
+    public string nextStageUnlock = "Stage 2";
+    public int newGamePlusUnlock = 0;
+
+    public string currentStage = "Stage 1";
     private GameObject victoryScreen;
     private GameObject defeatScreen;
 
@@ -23,9 +27,21 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log(Application.persistentDataPath.ToString());
         victoryScreen = GameObject.Find("Victory Screen");
         defeatScreen = GameObject.Find("Defeat Screen");
-        this.playerData = SaveManager.Instance.CurrentSave;
+
+        try
+        {
+            this.playerData = SaveManager.Instance.CurrentSave;
+        }
+        catch (System.Exception)
+        {
+            string path = Application.persistentDataPath + "/playerData_1.json";
+            string json = File.ReadAllText(path);
+            this.playerData = JsonUtility.FromJson<PlayerData>(json);
+        }
+        
         startTime = Time.realtimeSinceStartup;
 
         damageTaken = 0;
@@ -67,6 +83,7 @@ public class GameController : MonoBehaviour
         int points = 0;
         playerData.exp += expGained;
         playerData.playtime += elapsedTime;
+        playerData.newgameplus += newGamePlusUnlock;
         playerData.progress.Add(nextStageUnlock);
 
         while (playerData.exp >= playerData.level * 100 )
@@ -95,18 +112,23 @@ public class GameController : MonoBehaviour
 
     public void retry()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(currentStage);
     }
 
     public void toMainMenu()
     {
-        SaveManager.Instance.CurrentSave = this.playerData;
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+
+    public void toEnding(string name)
+    {
+        SaveManager.Instance.CurrentSave = this.playerData; 
 
         string json = JsonUtility.ToJson(playerData);
         string path = Application.persistentDataPath + "/playerData_" + playerData.saveslot + ".json";
         System.IO.File.WriteAllText(path, json);
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(name);
     }
 
     public void incrementDamageTaken(int amount) {

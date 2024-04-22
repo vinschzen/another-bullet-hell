@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WaveBombController : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -18,11 +17,15 @@ public class WaveBombController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collided");
-        if (other.gameObject.tag == "EnemyBullet")
+        // Debug.Log("Collided");
+        Component component = other.gameObject.GetComponent<EnemyBullet>();
+        if (component)
         {
-            Debug.Log("Collided with Bullet");
-            Destroy(other.gameObject);
+            if (other.gameObject.tag == "EnemyBullet")
+            {
+                Destroy(other.gameObject);
+
+            }
         }
     }
 }

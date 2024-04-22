@@ -1,0 +1,23 @@
+{
+  "name": "Princess",
+  "icon": "character02.png",
+  "text": [
+    "Ho ho ho...",
+    "You dare enter my domain ?",
+    "What is your purpose ?"
+  ],
+  "choices": [
+    {
+      "text": "To serve you.",
+      "next": "s1y"
+    },
+    {
+        "text": "To stop you.",
+        "next": "s1n"
+    },
+    {
+        "text": "Neither.",
+        "next": "s1e"
+    }
+  ]
+}

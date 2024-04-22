@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(BaseWeapon))]
 public class SingleShot : BaseWeapon
 {
-    public SingleShot() : base("Single Shot", 1, 1f)
+    public SingleShot() : base("Single Shot", 1, 1f, 1, 1, 1)
     {
     }
     public override void Fire(Transform bulletSpawn)

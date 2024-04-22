@@ -1,0 +1,10 @@
+{
+  "name": "Princess",
+  "icon": "character02.png",
+  "text": [
+    "...Excuse me ?",
+    "You chose to not pick a side ?",
+    "Have you lost your mind ?"
+  ],
+  "next": "s2"
+}

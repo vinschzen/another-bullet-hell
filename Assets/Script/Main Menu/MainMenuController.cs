@@ -5,6 +5,9 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.IO;
+using Unity.VisualScripting;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -19,8 +22,17 @@ public class MainMenuController : MonoBehaviour
     public TMP_Text stageDifficultySpan;
     void Start()
     {
-        PlayerData data = SaveManager.Instance.CurrentSave;
-
+        PlayerData data;
+        try
+        {
+            data = SaveManager.Instance.CurrentSave;
+        }
+        catch (System.Exception)
+        {
+            string path = Application.persistentDataPath + "/playerData_1.json";
+            string json = File.ReadAllText(path);
+            data = JsonUtility.FromJson<PlayerData>(json);
+        }
         nameSpan.text = data.name;
         levelSpan.text = "Level " + data.level;
         expSpan.text = "Exp: " + data.exp + "/" + data.level*100;
@@ -57,8 +69,8 @@ public class MainMenuController : MonoBehaviour
             GameObject stage = GameObject.Find(stageName + " Button");
             // Debug.Log($"Stage Name : {stageName}");
             if (stage) {
-                stage.GetComponent<Button>().interactable = true;
                 stage.SetActive(true);
+                stage.GetComponent<Button>().interactable = true;
             }
             else {
                 Debug.Log(stageName + " not found");
@@ -83,9 +95,9 @@ public class MainMenuController : MonoBehaviour
         menu.SetActive(true);
     }
 
-    public void selectStage(int stage)
+    public void selectStage(string stageName)
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(stageName);
     }
 
     public void exit()

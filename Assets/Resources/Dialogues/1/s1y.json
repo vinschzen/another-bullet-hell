@@ -1,8 +1,9 @@
 {
-  "name": "Character Name",
+  "name": "Student",
   "icon": "character01.png",
   "text": [
-    "Yes ? no need to worry then.",
+    "Really ?",
+    "Thank you !",
     "Let's continue."
   ],
   "next": "s2"

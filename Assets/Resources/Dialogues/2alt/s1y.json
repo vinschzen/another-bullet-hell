@@ -1,0 +1,10 @@
+{
+  "name": "Princess",
+  "icon": "character02.png",
+  "text": [
+    "Mmhmm ?",
+    "Fascinating.",
+    "Then i'd like to see you try."
+  ],
+  "next": "s2"
+}

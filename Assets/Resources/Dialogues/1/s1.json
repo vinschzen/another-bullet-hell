@@ -1,11 +1,11 @@
 {
-  "name": "Character Name",
+  "name": "Student",
   "icon": "character01.png",
   "text": [
-    "This is the most feature-rich dialog with choices you can make.",
-    "This is the first dialogue",
-    "And this is the second",
-    "Finally, this is the third."
+    "Hello there.",
+    "Can you help me with my homework ?",
+    "It's not that difficult.",
+    "Will you help me ?"
   ],
   "choices": [
     {

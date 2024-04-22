@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyBullet : MonoBehaviour
 {
     public int damage = 1;
+    public bool destroyOnHit = true;
 
     void OnTriggerEnter(Collider other)
     {
@@ -13,7 +14,7 @@ public class EnemyBullet : MonoBehaviour
         if (health != null)
         {
             health.TakeDamage(damage);
-            Destroy(gameObject);
+            if (destroyOnHit) Destroy(gameObject);
         }
 
     }

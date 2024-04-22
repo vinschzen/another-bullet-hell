@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class KeybindController : MonoBehaviour
     {
-    [SerializeField] private Button rebindButton; // Reference to the rebind UI button
-    [SerializeField] private TextMeshProUGUI keybindText; // Reference to the TextMeshProUGUI for displaying keybind
-    [SerializeField] private InputActionAsset inputActions; // Reference to your InputActionAsset
-    [SerializeField] private string actionToRebind; // Name of the action to rebind
+    [SerializeField] private Button rebindButton; 
+    [SerializeField] private TextMeshProUGUI keybindText; 
+    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private string actionToRebind;
 
     private InputAction RebindAction; 
 

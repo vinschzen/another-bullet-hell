@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,20 @@ public class HealthBar : MonoBehaviour
 
   private List<Image> healthSegments; 
 
+  private PlayerData data;
   private void Start()
   {
-    int health = SaveManager.Instance.CurrentSave.stats[2].value ;
+    try
+    {
+        this.data = SaveManager.Instance.CurrentSave;
+    }
+    catch (System.Exception)
+    {
+        string path = Application.persistentDataPath + "/playerData_1.json";
+        string json = File.ReadAllText(path);
+        this.data = JsonUtility.FromJson<PlayerData>(json);
+    }
+    int health = data.stats[2].value ;
     healthSegments = new List<Image>();
     float initialWidth = 300;
     float segmentWidth = (initialWidth / health) - 7.5f;
