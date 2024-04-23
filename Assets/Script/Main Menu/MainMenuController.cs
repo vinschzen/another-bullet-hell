@@ -37,7 +37,7 @@ public class MainMenuController : MonoBehaviour
         levelSpan.text = "Level " + data.level;
         expSpan.text = "Exp: " + data.exp + "/" + data.level*100;
         attackSpan.text = "Attack : " + data.stats[0].value;
-        defenseSpan.text = "Defense : " + data.stats[1].value;
+        defenseSpan.text = "Bullets : " + data.stats[1].value;
         healthSpan.text = "Health : " + data.stats[2].value;
         
         RectTransform expBarFill = GameObject.Find("Exp Bar Fill").GetComponent<RectTransform>();

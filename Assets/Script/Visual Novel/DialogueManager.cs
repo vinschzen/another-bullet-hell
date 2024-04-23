@@ -51,6 +51,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue()
     {
+        portraitImage.material = Resources.Load<Material>("Characters/"+dialogue.name+" Material");
         nameText.text = dialogue.name;
         // portraitImage.sprite = dialogue.icon;
 

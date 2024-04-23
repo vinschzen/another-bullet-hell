@@ -8239,7 +8239,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Defense :'
+  m_text: 'Bullets :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5469d273db4a33e4ea7304877634c0df, type: 2}
   m_sharedMaterial: {fileID: -5361898537340466935, guid: 5469d273db4a33e4ea7304877634c0df,
